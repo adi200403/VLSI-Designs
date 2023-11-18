@@ -1,0 +1,57 @@
+#JK_Code 
+module jk_ff(
+    input rst,clk,j,k,
+    output reg q
+    );
+    
+    always @(posedge clk or posedge rst)
+    
+        if(rst)
+        q =0;
+        else begin
+            case({j,k})
+            2'b00: q =q;
+            2'b01: q =0;
+            2'b10: q =1;
+            2'b11: q = ~q;
+            default:
+            q = q;
+            endcase
+        end
+    
+endmodule
+
+#JK_Testbench
+module tb_jk_ff(
+
+    );
+    
+    reg clk,rst,j,k;
+    wire q;
+    
+    jk_ff uut(.clk(clk),.rst(rst),.j(j),.k(k),.q(q));
+    
+    initial 
+    clk = 1;
+    always begin
+    #10 clk=~clk;
+    end
+    
+    initial begin
+        
+        rst=1;
+        j=0;k=0;
+        
+        #10 rst=1;
+        #10 rst=0;
+        
+        #10 j=0;k=0;
+        #10 j=0;k=1;
+        #10 j=1;k=0;
+        #10 j=1;k=1;
+        #10 j=0;k=0;
+        
+        $finish();
+        end
+    
+endmodule
